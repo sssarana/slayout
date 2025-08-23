@@ -1,3 +1,0 @@
-/Users/sarana/Desktop/slayout/build/CMakeFiles/slayoutc.dir
-/Users/sarana/Desktop/slayout/build/CMakeFiles/edit_cache.dir
-/Users/sarana/Desktop/slayout/build/CMakeFiles/rebuild_cache.dir

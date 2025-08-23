@@ -12,20 +12,27 @@ void Interpreter::interpret(const std::vector<std::shared_ptr<Statement>>& state
 
 void Interpreter::execute(const std::shared_ptr<Statement>& stmt) {
     if (auto def = std::dynamic_pointer_cast<MacroDefStatement>(stmt)) {
-        macros[def->varName] = Macro{def->macroName};
+        if (macros.count(def->macroName)) {
+            throw std::runtime_error("Duplicate macro name: " + def->macroName);
+        }
+        varToMacroName[def->varName] = def->macroName;
+        macros[def->macroName] = Macro{def->macroName};
     }
     else if (auto set = std::dynamic_pointer_cast<SetStatement>(stmt)) {
-        auto& macro = macros.at(set->varName);
+        std::string macroName = varToMacroName.at(set->varName);
+        auto& macro = macros.at(macroName);
         std::string backend = to_lower(set->backend);
         std::string value = set->isReadFromFile ? load_file(set->value) : set->value;
         macro.backendValues[backend] = value;
     }
     else if (auto setd = std::dynamic_pointer_cast<SetDefaultStatement>(stmt)) {
-        auto& macro = macros.at(setd->varName);
+        std::string macroName = varToMacroName.at(setd->varName);
+        auto& macro = macros.at(macroName);
         macro.defaultValue = setd->isReadFromFile ? load_file(setd->value) : setd->value;
     }
     else if (auto lazy = std::dynamic_pointer_cast<LazyStatement>(stmt)) {
-        macros.at(lazy->varName).lazy = true;
+        std::string macroName = varToMacroName.at(lazy->varName);
+        macros.at(macroName).lazy = true;
     }
     else if (auto b = std::dynamic_pointer_cast<BooleanDeclaration>(stmt)) {
         bools[b->name] = b->value;
