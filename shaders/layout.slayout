@@ -1,0 +1,13 @@
+// Define a macro named MEOW
+macrodef matLayout = Macro("MEOW");
+
+matLayout.set_glsl("layout(std140, binding = 0) uniform Matrices { mat4 MVP; };");
+matLayout.set_hlsl("cbuffer Matrices : register(b0) { float4x4 MVP; };");
+
+matLayout.set_default("uniform Matrices { mat4 MVP; };");
+
+boolean isEnabled = TRUE;
+
+SYSTEM->generate_select(GLSL, HLSL);
+
+print SYSTEM->list_backends();

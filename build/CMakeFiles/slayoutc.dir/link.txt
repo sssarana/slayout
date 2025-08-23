@@ -1,0 +1,1 @@
+/usr/bin/c++  -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/slayoutc.dir/src/interpreter.cpp.o CMakeFiles/slayoutc.dir/src/main.cpp.o CMakeFiles/slayoutc.dir/src/parser.cpp.o CMakeFiles/slayoutc.dir/src/shader_processor.cpp.o CMakeFiles/slayoutc.dir/src/tokenizer.cpp.o -o bin/slayoutc
