@@ -19,6 +19,7 @@ enum class TokenType {
     Arrow,
     Comma,
     Percent,
+    Plus,
 
     EndOfFile
 };

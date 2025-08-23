@@ -71,7 +71,7 @@ Token Tokenizer::identifier_or_keyword() {
         value += advance();
     }
 
-    if (value == "macrodef" || value == "Macro" ||
+    if (value == "string" || value == "macrodef" || value == "Macro" ||
         value == "lazy" || value == "boolean" ||
         value == "if" || value == "print" ||
         value == "set_glsl" || value == "set_hlsl" ||
@@ -100,6 +100,7 @@ Token Tokenizer::symbol() {
         case '{': return make_token(TokenType::LBrace, "{");
         case '}': return make_token(TokenType::RBrace, "}");
         case ',': return make_token(TokenType::Comma, ",");
+        case '+': return make_token(TokenType::Plus, "+");
         case '%': return make_token(TokenType::Percent, "%");
         case '-':
             if (match('>')) return make_token(TokenType::Arrow, "->");

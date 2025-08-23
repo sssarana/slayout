@@ -23,6 +23,7 @@ private:
     std::map<std::string, bool> bools;
     std::set<std::string> requiredBackends;
     std::map<std::string, std::string> varToMacroName;
+    std::map<std::string, std::string> strings;
 
     void execute(const std::shared_ptr<Statement>& stmt);
     void execute_block(const std::vector<std::shared_ptr<Statement>>& body);

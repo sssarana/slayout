@@ -22,7 +22,17 @@ void Interpreter::execute(const std::shared_ptr<Statement>& stmt) {
         std::string macroName = varToMacroName.at(set->varName);
         auto& macro = macros.at(macroName);
         std::string backend = to_lower(set->backend);
-        std::string value = set->isReadFromFile ? load_file(set->value) : set->value;
+        std::string value;
+        if (set->isReadFromFile) {
+            value = load_file(set->value);
+        } else if (set->isVariable) {
+            if (!strings.count(set->value)) {
+                throw std::runtime_error("Undefined string variable: " + set->value);
+            }
+            value = strings.at(set->value);
+        } else {
+            value = set->value;
+        }
         macro.backendValues[backend] = value;
     }
     else if (auto setd = std::dynamic_pointer_cast<SetDefaultStatement>(stmt)) {
@@ -63,6 +73,9 @@ void Interpreter::execute(const std::shared_ptr<Statement>& stmt) {
         } else {
             std::cerr << "Unknown print expression: " << print->expression << "\n";
         }
+    }
+    else if (auto s = std::dynamic_pointer_cast<StringDeclaration>(stmt)) {
+        strings[s->name] = s->expression;
     }
     else {
         throw std::runtime_error("Unknown statement type in interpreter");

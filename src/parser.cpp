@@ -52,6 +52,7 @@ std::shared_ptr<Statement> Parser::parse_statement() {
         if (keyword == "if") return parse_if();
         if (keyword == "SYSTEM") return parse_generate();
         if (keyword == "print") return parse_print();
+        if (keyword == "string")   return parse_string();
     }
 
     if (check(TokenType::Identifier)) return parse_set_or_read();
@@ -88,44 +89,54 @@ bool starts_with(const std::string& s, const std::string& prefix) {
 }
 
 std::shared_ptr<Statement> Parser::parse_set_or_read() {
-    std::string varName;
-    varName = advance().value;
+    std::string varName = advance().value;
 
     consume(TokenType::Dot, "Expected '.'");
     consume(TokenType::Keyword, "Expected setter/reader function");
 
     std::string func = previous().value;
-    consume(TokenType::LParen, "Expected '('");
-    consume(TokenType::String, "Expected string literal");
-    std::string value = previous().value;
-    consume(TokenType::RParen, "Expected ')'");
-    consume(TokenType::Semicolon, "Expected ';'");
 
     if (func == "lazy") {
         consume(TokenType::LParen, "Expected '(' after lazy");
-        consume(TokenType::RParen, "Expected ')' after lazy");
+        consume(TokenType::RParen, "Expected ')' after lazy()");
         consume(TokenType::Semicolon, "Expected ';' after lazy()");
         auto stmt = std::make_shared<LazyStatement>();
         stmt->varName = varName;
         return stmt;
     }
 
-    //bool isRead = func.starts_with("read_");
-
-    // for c++ < 20:
     bool isRead = starts_with(func, "read_");
     bool isDefault = func.find("default") != std::string::npos;
+
+    consume(TokenType::LParen, "Expected '('");
+
+    std::string value;
+    bool isVariable = false;
+
+    if (match(TokenType::String)) {
+        value = previous().value;
+    } else if (match(TokenType::Identifier)) {
+        value = previous().value;
+        isVariable = true;
+    } else {
+        throw std::runtime_error("Expected string literal or variable name inside " + func);
+    }
+
+    consume(TokenType::RParen, "Expected ')'");
+    consume(TokenType::Semicolon, "Expected ';'");
 
     if (isDefault) {
         auto stmt = std::make_shared<SetDefaultStatement>();
         stmt->varName = varName;
         stmt->value = value;
         stmt->isReadFromFile = isRead;
+        stmt->isVariable = isVariable;
         return stmt;
     } else {
         auto stmt = std::make_shared<SetStatement>();
         stmt->varName = varName;
         stmt->isReadFromFile = isRead;
+        stmt->isVariable = isVariable;
 
         size_t underscore = func.find('_');
         if (underscore != std::string::npos) {
@@ -138,6 +149,7 @@ std::shared_ptr<Statement> Parser::parse_set_or_read() {
         return stmt;
     }
 }
+
 
 std::shared_ptr<Statement> Parser::parse_lazy() {
     throw std::runtime_error("lazy() must be used as a method on a macro");
@@ -236,4 +248,30 @@ Backend Parser::parse_backend_enum(const std::string& value) {
     if (value == "MSL") return Backend::MSL;
     if (value == "SPIRV") return Backend::SPIRV;
     return Backend::UNKNOWN;
+}
+
+std::shared_ptr<Statement> Parser::parse_string() {
+    consume(TokenType::Identifier, "Expected variable name after 'string'");
+    std::string name = previous().value;
+
+    consume(TokenType::Equals, "Expected '=' after variable name");
+
+    std::string result;
+    consume(TokenType::String, "Expected string or identifier");
+    result += previous().value;
+
+    while (match(TokenType::Plus)) {
+        if (match(TokenType::String) || match(TokenType::Identifier)) {
+            result += previous().value;
+        } else {
+            throw std::runtime_error("Expected string or identifier after '+'");
+        }
+    }
+
+    consume(TokenType::Semicolon, "Expected ';' after string declaration");
+
+    auto stmt = std::make_shared<StringDeclaration>();
+    stmt->name = name;
+    stmt->expression = result;
+    return stmt;
 }

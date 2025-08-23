@@ -27,12 +27,19 @@ struct SetStatement : public Statement {
     std::string backend;
     std::string value;
     bool isReadFromFile;
+    bool isVariable = false;
+};
+
+struct StringDeclaration : public Statement {
+    std::string name;
+    std::string expression;
 };
 
 struct SetDefaultStatement : public Statement {
     std::string varName;
     std::string value;
     bool isReadFromFile;
+    bool isVariable = false;
 };
 
 struct LazyStatement : public Statement {
@@ -82,6 +89,7 @@ private:
     std::shared_ptr<Statement> parse_if();
     std::shared_ptr<Statement> parse_generate();
     std::shared_ptr<Statement> parse_print();
+    std::shared_ptr<Statement> parse_string();
 
     Backend parse_backend_enum(const std::string& value);
 };
