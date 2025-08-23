@@ -1,8 +1,9 @@
 // Define a macro named MEOW
 macrodef matLayout = Macro("MEOW");
 
-string code = "layout(std140, binding = 0) uniform Matrices { mat4 MVP; };";
-matLayout.set_glsl(code);
+string code1 = "layout(std140, binding = 0) ";
+string code2 = "uniform Matrices { mat4 MVP; };";
+matLayout.set_glsl(code1 + code2);
 matLayout.set_hlsl("cbuffer Matrices : register(b0) { float4x4 MVP; };");
 matLayout.set_msl("constant Matrices& MVP [[buffer(0)]];");
 matLayout.set_spirv("layout(binding = 0) uniform Matrices { mat4 MVP; };");

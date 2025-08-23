@@ -24,21 +24,52 @@ void Interpreter::execute(const std::shared_ptr<Statement>& stmt) {
         std::string backend = to_lower(set->backend);
         std::string value;
         if (set->isReadFromFile) {
-            value = load_file(set->value);
-        } else if (set->isVariable) {
-            if (!strings.count(set->value)) {
-                throw std::runtime_error("Undefined string variable: " + set->value);
+            if (set->parts.empty() || !set->isLiteral[0]) {
+                throw std::runtime_error("Expected literal path in read_*");
             }
-            value = strings.at(set->value);
+            value = load_file(set->parts[0]);
         } else {
-            value = set->value;
+            for (size_t i = 0; i < set->parts.size(); ++i) {
+                if (set->isLiteral[i]) {
+                    value += set->parts[i];
+                } else {
+                    const std::string& varName = set->parts[i];
+                    if (!strings.count(varName)) {
+                        throw std::runtime_error("Undefined string variable: " + varName);
+                    }
+                    value += strings.at(varName);
+                }
+            }
         }
+
         macro.backendValues[backend] = value;
     }
     else if (auto setd = std::dynamic_pointer_cast<SetDefaultStatement>(stmt)) {
         std::string macroName = varToMacroName.at(setd->varName);
         auto& macro = macros.at(macroName);
-        macro.defaultValue = setd->isReadFromFile ? load_file(setd->value) : setd->value;
+
+        std::string value;
+
+        if (setd->isReadFromFile) {
+            if (setd->parts.empty() || !setd->isLiteral[0]) {
+                throw std::runtime_error("Expected literal path in read_default");
+            }
+            value = load_file(setd->parts[0]);
+        } else {
+            for (size_t i = 0; i < setd->parts.size(); ++i) {
+                if (setd->isLiteral[i]) {
+                    value += setd->parts[i];
+                } else {
+                    const std::string& varName = setd->parts[i];
+                    if (!strings.count(varName)) {
+                        throw std::runtime_error("Undefined string variable: " + varName);
+                    }
+                    value += strings.at(varName);
+                }
+            }
+        }
+
+        macro.defaultValue = value;
     }
     else if (auto lazy = std::dynamic_pointer_cast<LazyStatement>(stmt)) {
         std::string macroName = varToMacroName.at(lazy->varName);
@@ -59,10 +90,10 @@ void Interpreter::execute(const std::shared_ptr<Statement>& stmt) {
     else if (auto genSel = std::dynamic_pointer_cast<GenerateSelectStatement>(stmt)) {
         for (auto b : genSel->backends) {
             switch (b) {
-                case Backend::GLSL: requiredBackends.insert("glsl"); break;
-                case Backend::HLSL: requiredBackends.insert("hlsl"); break;
-                case Backend::MSL:  requiredBackends.insert("msl");  break;
-                case Backend::SPIRV:requiredBackends.insert("spirv"); break;
+                case Backend::GLSL:  requiredBackends.insert("glsl");  break;
+                case Backend::HLSL:  requiredBackends.insert("hlsl");  break;
+                case Backend::MSL:   requiredBackends.insert("msl");   break;
+                case Backend::SPIRV: requiredBackends.insert("spirv"); break;
                 default: break;
             }
         }

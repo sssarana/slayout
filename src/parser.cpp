@@ -110,17 +110,20 @@ std::shared_ptr<Statement> Parser::parse_set_or_read() {
 
     consume(TokenType::LParen, "Expected '('");
 
-    std::string value;
-    bool isVariable = false;
+    std::vector<std::string> parts;
+    std::vector<bool> isLiteral;
 
-    if (match(TokenType::String)) {
-        value = previous().value;
-    } else if (match(TokenType::Identifier)) {
-        value = previous().value;
-        isVariable = true;
-    } else {
-        throw std::runtime_error("Expected string literal or variable name inside " + func);
-    }
+    do {
+        if (match(TokenType::String)) {
+            parts.push_back(previous().value);
+            isLiteral.push_back(true);
+        } else if (match(TokenType::Identifier)) {
+            parts.push_back(previous().value);
+            isLiteral.push_back(false);
+        } else {
+            throw std::runtime_error("Expected string literal or string variable inside " + func);
+        }
+    } while (match(TokenType::Plus));
 
     consume(TokenType::RParen, "Expected ')'");
     consume(TokenType::Semicolon, "Expected ';'");
@@ -128,15 +131,16 @@ std::shared_ptr<Statement> Parser::parse_set_or_read() {
     if (isDefault) {
         auto stmt = std::make_shared<SetDefaultStatement>();
         stmt->varName = varName;
-        stmt->value = value;
+        stmt->parts = parts;
+        stmt->isLiteral = isLiteral;
         stmt->isReadFromFile = isRead;
-        stmt->isVariable = isVariable;
         return stmt;
     } else {
         auto stmt = std::make_shared<SetStatement>();
         stmt->varName = varName;
         stmt->isReadFromFile = isRead;
-        stmt->isVariable = isVariable;
+        stmt->parts = parts;
+        stmt->isLiteral = isLiteral;
 
         size_t underscore = func.find('_');
         if (underscore != std::string::npos) {
@@ -145,7 +149,6 @@ std::shared_ptr<Statement> Parser::parse_set_or_read() {
             throw std::runtime_error("Invalid set/read function name");
         }
 
-        stmt->value = value;
         return stmt;
     }
 }

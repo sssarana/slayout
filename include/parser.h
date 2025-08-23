@@ -25,9 +25,9 @@ struct MacroDefStatement : public Statement {
 struct SetStatement : public Statement {
     std::string varName;
     std::string backend;
-    std::string value;
-    bool isReadFromFile;
-    bool isVariable = false;
+    std::vector<std::string> parts;
+    std::vector<bool> isLiteral;
+    bool isReadFromFile = false;
 };
 
 struct StringDeclaration : public Statement {
@@ -37,9 +37,9 @@ struct StringDeclaration : public Statement {
 
 struct SetDefaultStatement : public Statement {
     std::string varName;
-    std::string value;
-    bool isReadFromFile;
-    bool isVariable = false;
+    std::vector<std::string> parts;
+    std::vector<bool> isLiteral;
+    bool isReadFromFile = false;
 };
 
 struct LazyStatement : public Statement {
