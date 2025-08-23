@@ -75,8 +75,10 @@ Token Tokenizer::identifier_or_keyword() {
         value == "lazy" || value == "boolean" ||
         value == "if" || value == "print" ||
         value == "set_glsl" || value == "set_hlsl" ||
-        value == "set_default" || value == "read_glsl" ||
-        value == "read_hlsl" || value == "read_default" ||
+        value == "set_msl" || value == "set_spirv" ||
+        value == "read_glsl" || value == "read_hlsl" ||
+        value == "read_msl" || value == "read_spirv" ||
+        value == "set_default" || value == "read_default" ||
         value == "generate_all" || value == "generate_select" ||
         value == "SYSTEM") {
         return make_token(TokenType::Keyword, value);
