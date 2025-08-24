@@ -1,3 +1,5 @@
+<img src="slayout.png" width="128"/>
+
 # slayout — Shader Layout DSL and Compiler
 
 `slayout` is a domain-specific language (DSL) and compiler designed to simplify and unify shader layout definitions across multiple shading languages and graphics backends.
