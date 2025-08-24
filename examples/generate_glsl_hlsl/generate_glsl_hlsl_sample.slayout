@@ -1,0 +1,5 @@
+macrodef material = Macro("MATERIAL_DEF");
+material.set_glsl("uniform Material { vec4 color; };");
+material.set_hlsl("cbuffer Material : register(b0) { float4 color; };");
+print SYSTEM->list_backends();
+SYSTEM->generate_select(GLSL, HLSL);

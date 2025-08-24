@@ -1,0 +1,6 @@
+// Shader using full backend support
+vertex float3 pos [[attribute(0)]];
+
+void main() {
+    // Shader main code
+}

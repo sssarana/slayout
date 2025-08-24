@@ -1,0 +1,8 @@
+boolean useAdvanced = TRUE;
+
+macrodef adv = Macro("ADVANCED_FEATURE");
+adv.set_glsl("layout(location = 2) in vec3 normal;");
+
+if (useAdvanced) {
+    SYSTEM->generate_select(GLSL);
+}

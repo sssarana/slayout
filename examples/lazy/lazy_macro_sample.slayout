@@ -1,0 +1,3 @@
+macrodef testBlock = Macro("MISSING_LAYOUT");
+testBlock.lazy();
+SYSTEM->generate_select(GLSL);

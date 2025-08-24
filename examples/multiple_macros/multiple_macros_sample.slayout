@@ -1,0 +1,7 @@
+macrodef mvp = Macro("MVP_MACRO");
+macrodef color = Macro("COLOR_MACRO");
+
+mvp.set_glsl("uniform Matrices { mat4 MVP; };");
+color.set_glsl("layout(location = 1) in vec4 color;");
+
+SYSTEM->generate_select(GLSL);

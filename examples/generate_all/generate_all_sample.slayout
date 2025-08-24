@@ -1,0 +1,6 @@
+macrodef geometry = Macro("GEOMETRY_LAYOUT");
+geometry.set_glsl("layout(location = 0) in vec3 pos;");
+geometry.set_hlsl("float3 pos : POSITION;");
+geometry.set_msl("vertex float3 pos [[attribute(0)]];");
+geometry.set_spirv("OpDecorate %pos Location 0");
+SYSTEM->generate_all();

@@ -18,6 +18,7 @@ This document explains how to write `.slayout` files using the `slayout` DSL. Th
 7. String Variables and Concatenation
 8. System Commands
 9. Macro Usage in Shader Files
+10. Running in command line
 
 ## Macro Definition
 
@@ -164,6 +165,11 @@ void main() {
 
 During compilation, `%MY_MACRO_NAME` will be replaced with the backend-specific layout defined in your `.slayout` file.
 
+## Running in command line
+```sh
+./build/bin/slayoutc layout.slayout input.shader shaders
+```
+Where `layout.slayout` is your layout file, `input.shader` is your shader using macros, and `shaders` is the output directory.
 
 ## Notes
 

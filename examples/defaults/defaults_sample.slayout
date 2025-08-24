@@ -1,0 +1,3 @@
+macrodef lightData = Macro("LIGHT_BLOCK");
+lightData.set_default("uniform LightData { vec3 lightDir; };");
+SYSTEM->generate_all();

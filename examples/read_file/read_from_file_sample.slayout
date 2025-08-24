@@ -1,0 +1,4 @@
+macrodef lighting = Macro("LIGHT_UNIFORM");
+lighting.read_glsl("examples/read_file/light_block.glsl");
+lighting.read_default("examples/read_file/fallback_block.glsl");
+SYSTEM->generate_all();

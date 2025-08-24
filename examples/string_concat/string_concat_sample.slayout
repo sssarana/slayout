@@ -1,0 +1,6 @@
+string prefix = "layout(location = 0) in ";
+string suffix = "vec3 pos;";
+
+macrodef geo = Macro("GEO_LINE");
+geo.set_glsl(prefix + suffix);
+SYSTEM->generate_select(GLSL);
