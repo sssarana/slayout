@@ -49,3 +49,15 @@ This will build the CLI tool `slayoutc` inside `build/bin`.
 
 ## Usage
 Want to learn how to use the language? Check out `USAGE.md` for syntax guide. You can also find examples of typical use cases in `examples/` folder.
+
+## VSCode Extension available!
+[Slayout Tools](https://marketplace.visualstudio.com/items?itemName=sssarana.slayout-tools) extension enables syntax highlighting for `.slayout` files and macro highlighting for shaders.
+When hovering on the macro, it will display all backend-specific code associated with it, like this:
+
+![example](example.png)
+
+To find this extension you can search for `Slayout Tools` or follow the link provided above.
+
+![find](find.png)
+
+Enjoy!
