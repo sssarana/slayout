@@ -17,6 +17,7 @@ public:
 
     const std::map<std::string, Macro>& get_macros() const;
     const std::set<std::string>& get_required_backends() const;
+    void export_macro_metadata(const std::string& outputPath) const;
 
 private:
     std::map<std::string, Macro> macros;

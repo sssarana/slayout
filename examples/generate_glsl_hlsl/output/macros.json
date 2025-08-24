@@ -1,0 +1,7 @@
+{
+    "MATERIAL_DEF": {
+        "glsl": "uniform Material { vec4 color; };",
+        "hlsl": "cbuffer Material : register(b0) { float4 color; };",
+        "lazy": false
+    }
+}

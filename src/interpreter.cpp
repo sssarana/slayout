@@ -3,6 +3,7 @@
 #include <sstream>
 #include <iostream>
 #include <algorithm>
+#include <nlohmann/json.hpp>
 
 void Interpreter::interpret(const std::vector<std::shared_ptr<Statement>>& statements) {
     for (const auto& stmt : statements) {
@@ -143,4 +144,27 @@ std::string Interpreter::to_lower(const std::string& s) const {
         return std::tolower(c);
     });
     return result;
+}
+
+using json = nlohmann::json;
+
+void Interpreter::export_macro_metadata(const std::string& outputPath) const {
+    json j;
+    for (const auto& [macroName, macro] : macros) {
+        json macroJson;
+        macroJson["lazy"] = macro.lazy;
+        if (!macro.defaultValue.empty()) {
+            macroJson["default"] = macro.defaultValue;
+        }
+        for (const auto& [backend, code] : macro.backendValues) {
+            macroJson[backend] = code;
+        }
+        j[macroName] = macroJson;
+    }
+
+    std::ofstream out(outputPath);
+    if (!out) {
+        throw std::runtime_error("Failed to write macro metadata to: " + outputPath);
+    }
+    out << j.dump(4);
 }

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 project(slayoutc LANGUAGES CXX)
-
+find_package(nlohmann_json REQUIRED)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g -O1")
@@ -13,7 +13,7 @@ file(GLOB SOURCES
 )
 
 add_executable(slayoutc ${SOURCES})
-
+target_link_libraries(slayoutc PRIVATE nlohmann_json::nlohmann_json)
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang|GNU")
     target_compile_options(slayoutc PRIVATE -Wall -Wextra -pedantic)
 elseif (MSVC)

@@ -1,0 +1,10 @@
+{
+    "COLOR_MACRO": {
+        "glsl": "layout(location = 1) in vec4 color;",
+        "lazy": false
+    },
+    "MVP_MACRO": {
+        "glsl": "uniform Matrices { mat4 MVP; };",
+        "lazy": false
+    }
+}

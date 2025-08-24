@@ -1,0 +1,7 @@
+{
+    "LIGHT_UNIFORM": {
+        "default": "uniform Lighting {\n    vec3 fallbackDirection;\n    vec3 fallbackColor;\n};\n",
+        "glsl": "layout(std140, binding = 1) uniform Lighting {\n    vec3 lightDirection;\n    vec3 lightColor;\n};\n",
+        "lazy": false
+    }
+}

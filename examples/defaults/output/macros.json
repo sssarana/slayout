@@ -1,0 +1,6 @@
+{
+    "LIGHT_BLOCK": {
+        "default": "uniform LightData { vec3 lightDir; };",
+        "lazy": false
+    }
+}

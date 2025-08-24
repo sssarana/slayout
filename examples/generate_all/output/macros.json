@@ -1,0 +1,9 @@
+{
+    "GEOMETRY_LAYOUT": {
+        "glsl": "layout(location = 0) in vec3 pos;",
+        "hlsl": "float3 pos : POSITION;",
+        "lazy": false,
+        "msl": "vertex float3 pos [[attribute(0)]];",
+        "spirv": "OpDecorate %pos Location 0"
+    }
+}

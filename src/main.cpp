@@ -36,6 +36,7 @@ int main(int argc, char** argv) {
         ShaderProcessor::process_shader(shaderFile, outputPath, macros, backend);
         std::cout << "Generated: " << outputPath << "\n";
     }
+    interpreter.export_macro_metadata(outputDir + "/macros.json");
 
     return 0;
 }
