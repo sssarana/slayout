@@ -1,8 +1,0 @@
-// This will be replaced with the backend-specific layout
-constant Matrices& MVP [[buffer(0)]];
-
-layout(location = 0) in vec3 position;
-
-void main() {
-    gl_Position = MVP * vec4(position, 1.0);
-}
